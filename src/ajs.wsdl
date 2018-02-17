@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:kopr="http://localhost:8080/ajs?wsdl"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="ajs" targetNamespace="http://localhost:8080/ajs?wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:koprxsd="urn:X-kopr">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="urn:X-kopr" xmlns:tns="urn:X-kopr"
+			elementFormDefault="qualified">
+
+			<xsd:element name="AddSubjectRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SubjectName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="AddSubjectResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SubjectUUID" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="SubjectExist">
+				<xsd:complexType>
+					<xsd:all>
+						<xsd:element name="ErrorMessage" type="xsd:string" />
+					</xsd:all>
+				</xsd:complexType>
+			</xsd:element>
+
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="addSubjectRequest">
+		<wsdl:part name="parameters" element="koprxsd:AddSubjectRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addSubjectResponse">
+		<wsdl:part name="parameters" element="koprxsd:AddSubjectResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="SubjectExist">
+		<wsdl:part name="fault" element="koprxsd:SubjectExist"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="AJSPort">
+		<wsdl:operation name="addSubject">
+			<wsdl:input message="kopr:addSubjectRequest"></wsdl:input>
+			<wsdl:output message="kopr:addSubjectResponse"></wsdl:output>
+			<wsdl:fault message="kopr:SubjectExist" name="SubjectExist"></wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="AJSPortBinding" type="kopr:AJSPort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="addSubject">
+			<soap:operation soapAction="http://localhost:8080/ajs?wsdl/addSubject" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="SubjectExist">
+				<soap:fault name="SubjectExist" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="AJSService">
+		<wsdl:port name="AJSPort" binding="kopr:AJSPortBinding">
+			<soap:address location="http://localhost:8080/ajs" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

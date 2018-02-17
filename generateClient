@@ -1,0 +1,4 @@
+SET METRO_HOME=C:/metro
+SET PATH=%PATH%;%METRO_HOME%/bin
+cd C:\Users\aha\SOAP\kopr-ajs
+wsimport -keep -wsdllocation http://localhost:8080/ajs?wsdl -d bin src/ajs.wsdl -p sk.kopr.ajs.klient -s src
